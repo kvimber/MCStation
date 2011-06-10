@@ -12,4 +12,4 @@
 # ignore all compiled python files
 /*.pyc
 # the minecart_station properties file, currently blocked out to get an initial skeleton up for others
-# /properties.py
+/properties.py
