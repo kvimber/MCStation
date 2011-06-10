@@ -1,0 +1,15 @@
+# all files created by the minecraft server
+/ops.txt
+/banned-ips.txt
+/banned-players.txt
+/ops.txt
+/white-list.txt
+/server.properties
+/server.log
+# lock file on the server log, which occasionally shows up
+/server.log.lck
+/world/
+# ignore all compiled python files
+/*.pyc
+# the minecart_station properties file, currently blocked out to get an initial skeleton up for others
+# /properties.py
