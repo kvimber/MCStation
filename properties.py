@@ -24,20 +24,30 @@ SERVER_HOST = 'server.host'
 
 # actual property values go below
 PROPS = {
-    CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar ../server/minecraft_server.jar nogui", 
-    CLI_RUNMAPPER: "../mcmap-src/mcmap world", 
-    PATH_LOGFILE: "server.log", 
+    # command to run the minecraft server
+    CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar ../server/minecraft_server.jar nogui",
+    # command to run the map system
+    CLI_RUNMAPPER: "../mcmap-src/mcmap world",
+    # path to server file, most likely won't change since the server is run
+    # from the directory by MCServer
+    PATH_LOGFILE: "server.log",
+    # mail server details, default are gmail settings
     SMTP_HOST: "smtp.gmail.com", 
     SMTP_PORT: 465,
     # server from address login settings
-    # notice that this won't work with gmail's two factor auth
+    # notice that this shouldn't work with gmail's two factor auth
     SMTP_FROMADDR: "", 
-    SMTP_FROMPASS: "", 
+    SMTP_FROMPASS: "",
+    # to address for map & notification emails
     SMTP_TOADDR: "", 
-    SMTP_TIMEOUT: 30, 
-    SMTP_SUBJECT: "Current MC Map", 
-    PATH_MAPFILE: "output.png", 
-    SMTP_ATTACHFILENAME: "latest.png", 
+    SMTP_TIMEOUT: 30,
+    # subject of map & notification emails
+    SMTP_SUBJECT: "Current MC Map",
+    # path to img file that's output by the map software
+    PATH_MAPFILE: "output.png",
+    # filename of the map attachment for emails
+    SMTP_ATTACHFILENAME: "latest.png",
+    # server details for MCServer
     SERVER_PORT: 9001,
     SERVER_HOST: ""
 }
