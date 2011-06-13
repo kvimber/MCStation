@@ -13,18 +13,45 @@ import mapper, mailer           # for running map generation and mailing
 import socket                   # for networking the server
 import threading                # for server threading
 import properties               # for property handling
+import user_properties          # for property handling
 import time                     # for test setup method
+import os
 
 class MCServer:
 
     def __init__(self):
         print "System initializing..."
         self.props = properties.PROPS
+        self.uprops = user_properties.PROPS
         self.p = None
         self.lock = threading.Lock()
         self.thread_id = 0
-
+        self.check_platform()
+        self.startup()
         print "System initialized."
+        print self.props[properties.CLI_RUNSERVER]
+
+    #Validates the users system and properties
+    def startup(self):
+        # Checks to see if java is available
+        self.jtest = subprocess.Popen(self.java_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        (child_stdout, child_stderr) = self.jtest.communicate()
+        if(child_stderr.startswith("java version")):
+            print "Java found"
+        else:
+            raise RuntimeError("Unable to locate Java. Verify you have it installed and on your path")
+        # Checks to see if minecraft_server.jar can be found
+        if(os.path.exists(self.props[properties.PATH_SERVER] + "/minecraft_server.jar")):
+           print "Minecraft found"
+        else:
+           raise RuntimeError("Unable to find minecraft_server.jar. Double check path in properties.py")
+        
+        # Checks to see if mapping utility can be found.
+        self.mapper_avail = os.path.exists(self.props[properties.PATH_MAPPER] + self.props[properties.MAPPER_CMD])
+        if(self.mapper_avail):
+            print "Mapping software found. Mapping functionality available for use"
+        else:
+            print "Mapping software not found. Add mapper to properties.py if you want to enable mapping functionality"
 
     def start(self):
         if self.p is None:
@@ -90,13 +117,19 @@ class MCServer:
 
     # map and mailing functions
     def runMapper(self):
-        mapTool = mapper.Mapper(self)
-        mapTool.run()
+        if(self.mapper_avail):
+            mapTool = mapper.Mapper(self)
+            mapTool.run()
+        else:
+            print "Mapping functionality not available. Please add a mapper in properties.py and restart server."
 
     def runMapperAndSend(self, to_addr=None):
-        self.runMapper()
-        mailTool = mailer.Mailer(self)
-        mailTool.sendImg(to_addr)
+        if(self.mapper_avail):
+            self.runMapper()
+            mailTool = mailer.Mailer(self)
+            mailTool.sendImg(to_addr)
+        else:
+            print "Mapping functionality not available. Please add a mapper in properties.py and restart server."
 
     def run_server(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -142,7 +175,14 @@ class MCServer:
         print "*" * 30
         print "running server now..."
         self.run_server()
-        
+
+    #Checks to see if running Unix or Windows. Any platform based modifications should be made here.
+    def check_platform(self):
+        self.platform = os.name
+        if (self.platform == "nt"):
+            self.java_cmd = "java -version"
+        elif (self.platform == "posix"):
+            self.java_cmd = "java --version"
 
 class ServerCmdThread(threading.Thread):
 
@@ -150,7 +190,6 @@ class ServerCmdThread(threading.Thread):
         threading.Thread.__init__(self, name="cmd" + str(thread_id))
         self.server = serverInstance
         self.conn = conn
-
 
     def run(self):
         while True:

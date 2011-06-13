@@ -9,6 +9,10 @@
 # these constants define the keys for the dictionary
 CLI_RUNSERVER = 'cli.run_server'
 CLI_RUNMAPPER = 'cli.run_mapper'
+MAPPER_CMD = 'mapper.cmd'
+MAPPER_ARG = 'mapper.arg'
+PATH_SERVER = 'path.server'
+PATH_MAPPER = 'path.mapper'
 PATH_LOGFILE = 'path.log_file'
 PATH_MAPFILE = 'path.map_file'
 SMTP_HOST = 'smtp.host'
@@ -24,13 +28,20 @@ SERVER_HOST = 'server.host'
 
 # actual property values go below
 PROPS = {
-    # command to run the minecraft server
-    CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar ../server/minecraft_server.jar nogui",
-    # command to run the map system
-    CLI_RUNMAPPER: "../mcmap-src/mcmap world",
     # path to server file, most likely won't change since the server is run
     # from the directory by MCServer
+    PATH_SERVER: "./server",
+    # Directory where mapping executable software resides
+    PATH_MAPPER: "../mcmap-src",
     PATH_LOGFILE: "server.log",
+    # command to run the minecraft server
+    CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar " + PATH_SERVER + "/minecraft_server.jar nogui",
+    # command to run the map system
+    CLI_RUNMAPPER: "../mcmap-src/" + MAPPER_CMD + " " + MAPPER_ARG,
+    # Executable or batch file used to run mapping software
+    MAPPER_CMD: "mcmap",
+    # Arguments passed to mapper command to create map
+    MAPPER_ARG: "world",
     # mail server details, default are gmail settings
     SMTP_HOST: "smtp.gmail.com", 
     SMTP_PORT: 465,
@@ -49,7 +60,7 @@ PROPS = {
     SMTP_ATTACHFILENAME: "latest.png",
     # server details for MCServer
     SERVER_PORT: 9001,
-    SERVER_HOST: ""
+    SERVER_HOST: "localhost"
 }
         
         
