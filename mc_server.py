@@ -13,7 +13,6 @@ import mapper, mailer           # for running map generation and mailing
 import socket                   # for networking the server
 import threading                # for server threading
 import properties               # for property handling
-import user_properties          # for property handling
 import time                     # for test setup method
 import os
 
@@ -22,14 +21,12 @@ class MCServer:
     def __init__(self):
         print "System initializing..."
         self.props = properties.PROPS
-        self.uprops = user_properties.PROPS
         self.p = None
         self.lock = threading.Lock()
         self.thread_id = 0
         self.check_platform()
         self.startup()
         print "System initialized."
-        print self.props[properties.CLI_RUNSERVER]
 
     #Validates the users system and properties
     def startup(self):
@@ -58,6 +55,7 @@ class MCServer:
             print "Setting up server instance..."
             cmd_list = shlex.split(self.props[properties.CLI_RUNSERVER])
             self.p = subprocess.Popen(cmd_list, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.watch_for_startup()
             print "Server up and running."
 
     def cmd(self, cmd):
@@ -183,6 +181,32 @@ class MCServer:
             self.java_cmd = "java -version"
         elif (self.platform == "posix"):
             self.java_cmd = "java --version"
+
+    #Debug method used to print returns from the subprocess
+    def debug(self):
+        (stderr, stdout) = self.p.communicate()
+        print "stdout"
+        print stdout
+        print "stderr"
+        print stderr
+
+
+    #Watches for '[INFO] Done' to be printed to log. If doesn't appear within a user defined number of seconds, throw an error
+    def watch_for_startup(self):
+        watch = True
+        count = 0
+        while(watch):
+            logs = self.get_logs()
+            print logs[-1]
+            if(logs[-1].find("[INFO] Done") != -1):
+                watch = False
+            time.sleep(1)
+            count += 1
+            if(count>30):
+                watch = False
+                self.debug()
+                raise RuntimeError("Error starting server")
+
 
 class ServerCmdThread(threading.Thread):
 

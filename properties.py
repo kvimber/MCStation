@@ -35,7 +35,8 @@ PROPS = {
     PATH_MAPPER: "../mcmap-src",
     PATH_LOGFILE: "server.log",
     # command to run the minecraft server
-    CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar " + PATH_SERVER + "/minecraft_server.jar nogui",
+    ##CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar " + PATH_SERVER + "/minecraft_server.jar nogui",
+    CLI_RUNSERVER: "java -Xmx1536M -Xms1536M -jar ./server/minecraft_server.jar nogui",
     # command to run the map system
     CLI_RUNMAPPER: "../mcmap-src/" + MAPPER_CMD + " " + MAPPER_ARG,
     # Executable or batch file used to run mapping software
