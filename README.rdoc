@@ -1,0 +1,8 @@
+= What It Is
+A Minecraft Server wrapper, designed to
+- be easy to install
+- provide easy means to manage your server from remote machines
+- provide all the management options and features that you've always wanted Minecraft to have
+
+= Who We Are
+We are a few guys (kvimber & renegaderebel) who enjoy playing minecraft on occasion, but wish we could do more with our minecraft servers, so we built this.  You know, the "scratch your own itch" train, and all that...
