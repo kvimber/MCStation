@@ -1,5 +1,8 @@
 import socket
 import properties
+import getpass
+import hashlib
+import mc_security as mc_sec
 
 class MCClient:
 
@@ -9,6 +12,21 @@ class MCClient:
         port = properties.PROPS[properties.SERVER_PORT]
         self.s.connect((host, port))
         print "Connected to " + host + " at port " + str(port) + "."
+        self.authenticate()
+
+    def authenticate(self):
+        user_name = raw_input("Username: ")
+        user_pass = getpass.getpass()
+        to_send = mc_sec.build_user_line(user_name, user_pass)
+        print "sending '" + to_send + "'"
+        self.s.send(to_send)
+        data = self.s.recv(1024)
+        if data == 'Authenticated':
+            print "Authentication succeeded as user " + user_name + "."
+        else :
+            print "Authentication failed. Please try again."
+            self.authenticate()
+        
 
     def run_cli(self):
         while True:

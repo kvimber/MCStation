@@ -15,6 +15,7 @@ import threading                # for server threading
 import properties               # for property handling
 import time                     # for test setup method
 import os
+import mc_security as mc_sec
 
 class MCServer:
 
@@ -224,10 +225,21 @@ class ServerCmdThread(threading.Thread):
         threading.Thread.__init__(self, name="cmd" + str(thread_id))
         self.server = serverInstance
         self.conn = conn
+        self.authenticated = False
 
     def run(self):
         while True:
             data = self.conn.recv(1024)
+            if not self.authenticated:
+                self.authenticated = mc_sec.try_authentication(data)
+                self.user_name = mc_sec.get_user(data)
+                if self.authenticated:
+                    self.conn.send("Authenticated")
+                    self.log(self.user_name + " authenticated.")
+                else:
+                    self.conn.send("Failed Authentication")
+                    self.log(self.user_name + " failed authentication.")
+                continue
             if not data: break
             self.server.lock.acquire()
             self.log("Lock acquired for cmd: '" + data + "'")
