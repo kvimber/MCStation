@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
+  <Product Name='MCStation 1.0' Id='7D76CAB4-4369-43D1-850C-88921F367079' UpgradeCode='B4F47890-AADA-4D06-9787-3817C8DE25E6'
+    Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='Boxing Nun Studios'>
+
+		<Package Id='*' Keywords='Installer' Description="BNS MCStation 1.0"
+			Manufacturer='Boxing Nun Studios'
+			InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+	  
+		<Media Id='1' Cabinet='MCStation.cab' EmbedCab='yes' DiskPrompt='CD-ROM #1' />
+		<Property Id='DiskPrompt' Value="BNS MCStation [1]" />
+		<Directory Id='TARGETDIR' Name='SourceDir'>
+			<Directory Id='ProgramFilesFolder' Name='PFiles'>
+				<Directory Id="BNS" Name="BNS">
+					<Directory Id="INSTALLDIR" Name="MCStation">
+						<Component Id="ServerCode" Guid="45755d70-9603-4490-8329-C03D166C9413">
+							<File Id="mc_server" Name="mc_server.py" DiskId='1' Source="mc_server.py" KeyPath="yes"/>
+							<File Id="mailer" Name="mailer.py" DiskId='1' Source="mailer.py" />
+							<File Id="mapper" Name="mapper.py" DiskId='1' Source="mapper.py" />
+						</Component>
+						<Component Id="Properties" Guid="E77dE431-44CD-4190-b9BE-76A68dCAA562">
+							<File Id="properties" Name="properties.py" DiskId='1' Source="properties.py" KeyPath="yes"/>
+						</Component>
+						<Component Id="ClientCode" Guid="55075150-9832-11E0-8552-38F44724019B">
+							<File Id="client" Name="mc_client.py" DiskId='1' Source="mc_client.py" KeyPath="yes"/>
+						</Component>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<Feature Id='Complete' Title='MCStation' Description="Complete Install of both Server and Client" Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
+			<Feature Id='Server' Title='Server' Description='Installs only the server side components' Level='1'>
+				<ComponentRef Id='ServerCode' />
+				<ComponentRef Id='Properties' />
+			</Feature>
+			
+			<Feature Id='Client' Title='Client' Description='Installs the client side components' Level='1000'>
+				<ComponentRef Id='ClientCode'/>
+			</Feature>
+		</Feature>
+		
+		<UIRef Id="WixUI_Mondo"/>
+		<UIRef Id="WixUI_ErrorProgressText"/>
+	</Product>
+</Wix>
