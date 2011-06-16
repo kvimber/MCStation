@@ -31,7 +31,7 @@ class MCServer:
     #Validates the users system and properties
     def startup(self):
         # Checks to see if java is available
-        self.jtest = subprocess.Popen(self.java_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.jtest = subprocess.Popen(shlex.split(self.java_cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (child_stdout, child_stderr) = self.jtest.communicate()
         if(child_stderr.startswith("java version")):
             print "Java found"
@@ -41,7 +41,7 @@ class MCServer:
         if(os.path.exists(self.props[properties.PATH_SERVER] + "/minecraft_server.jar")):
            print "Minecraft found"
         else:
-           raise RuntimeError("Unable to find minecraft_server.jar. Double check path in properties.py")
+           raise RuntimeError("Unable to find minecraft_server.jar. Double check PROPS[PATH_SERVER] in properties.py")
         
         # Checks to see if mapping utility can be found.
         self.mapper_avail = os.path.exists(self.props[properties.PATH_MAPPER] + self.props[properties.MAPPER_CMD])
@@ -49,6 +49,8 @@ class MCServer:
             print "Mapping software found. Mapping functionality available for use"
         else:
             print "Mapping software not found. Add mapper to properties.py if you want to enable mapping functionality"
+
+        # TODO: Check for mailer
 
     def start(self):
         if self.p is None:
@@ -176,11 +178,7 @@ class MCServer:
 
     #Checks to see if running Unix or Windows. Any platform based modifications should be made here.
     def check_platform(self):
-        self.platform = os.name
-        if (self.platform == "nt"):
-            self.java_cmd = "java -version"
-        elif (self.platform == "posix"):
-            self.java_cmd = "java --version"
+        self.java_cmd = "java -version"
 
     #Debug method used to print returns from the subprocess
     def debug(self):
@@ -197,7 +195,7 @@ class MCServer:
         count = 0
         while(watch):
             logs = self.get_logs()
-            print logs[-1]
+##            print logs[-1]
             if(logs[-1].find("[INFO] Done") != -1):
                 watch = False
             time.sleep(1)

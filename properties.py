@@ -9,6 +9,7 @@
 # these constants define the keys for the dictionary
 CLI_RUNSERVER = 'cli.run_server'
 CLI_RUNMAPPER = 'cli.run_mapper'
+CLI_JVMMEM = 'cli.jvm_mem'
 MAPPER_CMD = 'mapper.cmd'
 MAPPER_ARG = 'mapper.arg'
 PATH_SERVER = 'path.server'
@@ -27,41 +28,41 @@ SERVER_PORT = 'server.port'
 SERVER_HOST = 'server.host'
 
 # actual property values go below
-PROPS = {
-    # path to server file, most likely won't change since the server is run
-    # from the directory by MCServer
-    PATH_SERVER: "./server",
-    # Directory where mapping executable software resides
-    PATH_MAPPER: "../mcmap-src",
-    PATH_LOGFILE: "server.log",
-    # command to run the minecraft server
-    ##CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar " + PATH_SERVER + "/minecraft_server.jar nogui",
-    CLI_RUNSERVER: "java -Xmx1536M -Xms1536M -jar ./server/minecraft_server.jar nogui",
-    # command to run the map system
-    CLI_RUNMAPPER: "../mcmap-src/" + MAPPER_CMD + " " + MAPPER_ARG,
-    # Executable or batch file used to run mapping software
-    MAPPER_CMD: "mcmap",
-    # Arguments passed to mapper command to create map
-    MAPPER_ARG: "world",
-    # mail server details, default are gmail settings
-    SMTP_HOST: "smtp.gmail.com", 
-    SMTP_PORT: 465,
-    # server from address login settings
-    # notice that this shouldn't work with gmail's two factor auth
-    SMTP_FROMADDR: "", 
-    SMTP_FROMPASS: "",
-    # to address for map & notification emails
-    SMTP_TOADDR: "", 
-    SMTP_TIMEOUT: 30,
-    # subject of map & notification emails
-    SMTP_SUBJECT: "Current MC Map",
-    # path to img file that's output by the map software
-    PATH_MAPFILE: "output.png",
-    # filename of the map attachment for emails
-    SMTP_ATTACHFILENAME: "latest.png",
-    # server details for MCServer
-    SERVER_PORT: 9001,
-    SERVER_HOST: "localhost"
-}
-        
-        
+PROPS = {}
+# path to server file, most likely won't change since the server is run
+# from the directory by MCServer
+PROPS[PATH_SERVER] = "../server"
+# Directory where mapping executable software resides
+PROPS[PATH_MAPPER] = "../mcmap-src"
+PROPS[PATH_LOGFILE] = "server.log"
+# JVM Memory argument for the minecraft server
+PROPS[CLI_JVMMEM] = 1536
+# command to run the minecraft server
+##CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar " + PATH_SERVER + "/minecraft_server.jar nogui",
+PROPS[CLI_RUNSERVER] = "java -Xmx" + str(PROPS[CLI_JVMMEM]) + "M -Xms" + str(PROPS[CLI_JVMMEM]) + "M -jar " + PROPS[PATH_SERVER] + "/minecraft_server.jar nogui"
+# Executable or batch file used to run mapping software
+PROPS[PATH_MAPPER] = "../mcmap-src/"
+PROPS[MAPPER_CMD] = "mcmap"
+# Arguments passed to mapper command to create map
+PROPS[MAPPER_ARG] = "world"
+# command to run the map system
+PROPS[CLI_RUNMAPPER] = PROPS[PATH_MAPPER] + PROPS[MAPPER_CMD] + " " + PROPS[MAPPER_ARG]
+# mail server details, default are gmail settings
+PROPS[SMTP_HOST] = "smtp.gmail.com"
+PROPS[SMTP_PORT] = 465
+# server from address login settings
+# notice that this shouldn't work with gmail's two factor auth
+PROPS[SMTP_FROMADDR] = ""
+PROPS[SMTP_FROMPASS] = ""
+# to address for map & notification emails
+PROPS[SMTP_TOADDR] = ""
+PROPS[SMTP_TIMEOUT] = 30
+# subject of map & notification emails
+PROPS[SMTP_SUBJECT] = "Current MC Map"
+# path to img file that's output by the map software
+PROPS[PATH_MAPFILE] = "output.png"
+# filename of the map attachment for emails
+PROPS[SMTP_ATTACHFILENAME] = "latest.png"
+# server details for MCServer
+PROPS[SERVER_PORT] = 9001
+PROPS[SERVER_HOST] = "localhost"  
