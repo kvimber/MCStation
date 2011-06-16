@@ -75,10 +75,14 @@ class MCServer:
 
     # log functions don't need a running system, they deal with the file system instead
     def get_logs(self):
-        f = open(self.props[properties.PATH_LOGFILE], "r")
-        lines = f.readlines()
-        f.close()
-        return lines
+        if os.path.exists(self.props[properties.PATH_LOGFILE]):
+            f = open(self.props[properties.PATH_LOGFILE], "r")
+            lines = f.readlines()
+            f.close()
+            return lines
+        else:
+            print "The server.log file hasn't been created yet, no logs to get."
+            return []
 
     def get_logs_since(self, lastLoggedDate):
         ''' gets all logs newer than datetime object given (lastLoggedDate) '''
@@ -157,7 +161,12 @@ class MCServer:
         if cmd.startswith("/"):
             print "    Executing minecraft server command '" + cmd[1:] + "'."
             self.cmd(cmd[1:])
+        else:
+            self.run_mc_cmd(cmd)
         return True
+
+    def run_mc_cmd(self, cmd):
+        print "Running custom command... (fake)"
 
     def run_test_setup(self):
         self.start()
@@ -194,16 +203,19 @@ class MCServer:
         watch = True
         count = 0
         while(watch):
-            logs = self.get_logs()
-##            print logs[-1]
-            if(logs[-1].find("[INFO] Done") != -1):
-                watch = False
-            time.sleep(1)
-            count += 1
-            if(count>30):
-                watch = False
-                self.debug()
-                raise RuntimeError("Error starting server")
+            try:
+                time.sleep(1)
+                logs = self.get_logs()
+                print logs[-1], 
+                if(logs[-1].find("[INFO] Done") != -1):
+                    watch = False
+                count += 1
+                if(count>30):
+                    watch = False
+                    self.debug()
+                    raise RuntimeError("Error starting server")
+            except IndexError:
+                continue
 
 
 class ServerCmdThread(threading.Thread):
