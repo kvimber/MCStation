@@ -7,9 +7,33 @@
 #############################################################
 
 import hashlib
+import getpass
 
 SEPARATOR = ":::"
 FILENAME = "pass.txt"
+
+def get_creds(setting=False):
+    user_name = raw_input("Username: ")
+    if setting:
+        while True:
+            user_pass = getpass.getpass()
+            print "Please re-enter your password to confirm"
+            repeated = getpass.getpass()
+            if repeated != user_pass:
+                print "Passwords don't match.  Please try again."
+                print "*****************************************"
+            else:
+                break
+    else:
+        user_pass = getpass.getpass()
+    return user_name, user_pass
+
+def add_new_user_to_pass_store():
+    uname, upass = get_creds(True)
+    line = build_user_line(uname, upass)
+    pass_file = open(FILENAME, "a")
+    pass_file.write(line + "\n")
+    pass_file.close()
 
 def hash_user(uname, upass):
     hasher = hashlib.sha512()
@@ -39,3 +63,9 @@ def try_authentication(client_data_line):
 ##            print "recorded_hash (from the pass file): '" + recorded_hash + "'"
 ##            print "Returning " + str(recorded_hash == client_hash) + "."
             return recorded_hash == client_hash
+
+
+if __name__ == '__main__':
+    print "Please create credentials for new user"
+    add_new_user_to_pass_store()
+    print "User added to pass file. Exiting."
