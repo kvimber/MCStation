@@ -121,14 +121,14 @@ class MCServer:
         return datetime.strptime(curDate, '%Y-%m-%d %H:%M:%S')
 
     # map and mailing functions
-    def runMapper(self):
+    def run_mapper(self):
         if(self.mapper_avail):
             mapTool = mapper.Mapper(self)
             mapTool.run()
         else:
             print "Mapping functionality not available. Please add a mapper in properties.py and restart server."
 
-    def runMapperAndSend(self, to_addr=None):
+    def run_mapper_and_send(self, to_addr=None):
         if(self.mapper_avail):
             self.runMapper()
             mailTool = mailer.Mailer(self)
