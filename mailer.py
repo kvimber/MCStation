@@ -39,12 +39,15 @@ class Mailer:
             print "An unforseen error has taken place.  Raising unforseen exception, please send this information to the project maintainers for analysis by our robots..."
             raise exception
 
-    def sendMap(self):
+    def sendMap(self, to_addr=None):
         print "Generating email..."
         msg = MIMEMultipart()
         msg['Subject'] = self.server.props[ps.SMTP_SUBJECT]
         msg['From'] = self.server.props[ps.SMTP_FROMADDR]
-        msg['To'] = self.server.props[ps.SMTP_TOADDR]
+        if to_addr == None:
+            msg['To'] = self.server.props[ps.SMTP_TOADDR]
+        else:
+            msg['To'] = to_addr
 ##        msg.preamble = 'Preamble for Current MC Map'
 
         print "  Attaching image to send..."

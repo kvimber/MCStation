@@ -132,7 +132,7 @@ class MCServer:
         if(self.mapper_avail):
             self.runMapper()
             mailTool = mailer.Mailer(self)
-            mailTool.sendImg(to_addr)
+            mailTool.sendMap(to_addr)
         else:
             print "Mapping functionality not available. Please add a mapper in properties.py and restart server."
 
@@ -140,34 +140,52 @@ class MCServer:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind((self.props[properties.SERVER_HOST], self.props[properties.SERVER_PORT]))
         s.listen(5)
+        print "Server waiting on connections, Ctrl+C to quit"
         while True:
-            conn, addr = s.accept()
-            print "Connect by", addr
-            thread = ServerCmdThread(self, conn, self.thread_id)
-            thread.start()
-            self.thread_id += 1
-            print "Thread " + thread.name + " started..."
-##        while True:
-##            conn, addr = s.accept()
-##            print "Connected by", addr
-##            while True:
-##                data = conn.recv(1024)
-##                if not data: break
-##                if self.run_server_cmd(data):
-##                    conn.send("Server command received correctly.")
-##            conn.close()
+            try:
+                conn, addr = s.accept()
+                print "Connect by", addr
+                thread = ServerCmdThread(self, conn, self.thread_id)
+                thread.start()
+                self.thread_id += 1
+                print "Thread " + thread.name + " started..."
+            except KeyboardInterrupt:
+                print "Keyboard Interrupt Occured.  Exiting."
+                break
 
-    def run_server_cmd(self, cmd):
+    def run_server_cmd(self, cmd, server_cmd_thread):
         print "    Server command '" + str(cmd) + "' received.  Currently working on executing it."
         if cmd.startswith("/"):
             print "    Executing minecraft server command '" + cmd[1:] + "'."
             self.cmd(cmd[1:])
         else:
-            self.run_mc_cmd(cmd)
+            self.run_mc_cmd(cmd, server_cmd_thread)
         return True
 
-    def run_mc_cmd(self, cmd):
-        print "Running custom command... (fake)"
+    def run_mc_cmd(self, cmd, server_cmd_thread):
+        if cmd == "map":
+            self.runMapper()
+            print "    run mapper"
+            server_cmd_thread.conn.send("Mapper Successfull Run.\n")
+        elif cmd == "mapsend":
+            self.runMapperAndSend()
+            print "    run mapper and sent email"
+            server_cmd_thread.conn.send("Map Successfully Created and Sent.\n")
+        elif cmd == "getlogs":
+            logs = self.get_logs_since_last_start()
+            for i in range(len(logs)):
+                server_cmd_thread.conn.send(logs[i])
+        elif cmd == "start":
+            self.start()
+            server_cmd_thread.conn.send("Minecraft Server Started.\n")
+        elif cmd == "stop":
+            self.stop()
+            server_cmd_thread.conn.send("Minecraft Server Stopped.\n")
+        else:
+            server_cmd_thread.conn.send("Could not parse command.  Type 'help' to get command list.\n")
+                
+            
+            
 
     def run_test_setup(self):
         self.start()
@@ -243,17 +261,18 @@ class ServerCmdThread(threading.Thread):
             if not data: break
             self.server.lock.acquire()
             self.log("Lock acquired for cmd: '" + data + "'")
-            if self.server.run_server_cmd(data):
-                self.conn.send("Server command received correctly.")
+            if self.server.run_server_cmd(data, self):
+                self.conn.send("MCServer command received correctly.")
             self.server.lock.release()
 
     def log(self, log_string):
         print self.name + ": " + log_string
 
-##def main():
-##    server = MCServer()
-##    server.run_server()
-##    
-##
-##if __name__ == '__main__':
-##    main()
+def main():
+    server = MCServer()
+    print "Running server..."
+    server.run_server()
+    
+
+if __name__ == '__main__':
+    main()

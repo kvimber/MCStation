@@ -31,31 +31,29 @@ class MCClient:
             if inp == "quit":
                 print "Quitting..."
                 break
-            elif inp == "help":
-                self.print_help()
-            elif inp.startswith("/"):
-                self.s.send(inp)
             else:
-                if self.validate(inp):
-                    self.s.send(inp)
-                else:
-                    print "Command failed validation.  Type help for more information."
-            data = self.s.recv(1024)
-            print "Received reply from server: '" + data + "'"
+                self.s.send(inp)
+            data = []
+            recvd = self.s.recv(1024).split("\n")
+##            print "Received from server: "
+##            print recvd
+            for i in range(len(recvd)):
+                data.append(recvd[i])
+            while not data[len(data)-1].startswith("MCServer command received correctly."):
+                recvd = self.s.recv(1024).split("\n")
+##                print "Received from server: "
+##                print recvd
+                for i in range(len(recvd)):
+                    data.append(recvd[i])
+##            print "Received reply from server:"
+##            print data
+            for i in range(len(data)):
+                print data[i]
         self.close()
-
-    def print_help(self):
-        print "Help System Printing Now."
-        print "Oops, this is just a stub.  Looks like you're on your own for now"
-        print "End."
-
 
     def close(self):
         self.s.close()
         print "Socket closed. Exiting."
-
-    def validate(self, cmd):
-        return True
 
 if __name__ == '__main__':
     c = MCClient()
