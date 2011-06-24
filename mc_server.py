@@ -150,42 +150,56 @@ class MCServer:
                 self.thread_id += 1
                 print "Thread " + thread.name + " started..."
             except KeyboardInterrupt:
-                print "Keyboard Interrupt Occured.  Exiting."
+                print "\nKeyboard Interrupt Occurred.  Exiting."
                 break
 
-    def run_server_cmd(self, cmd, server_cmd_thread):
+    def run_server_cmd(self, cmd):
         print "    Server command '" + str(cmd) + "' received.  Currently working on executing it."
+        result = ""
         if cmd.startswith("/"):
             print "    Executing minecraft server command '" + cmd[1:] + "'."
-            self.cmd(cmd[1:])
-        else:
-            self.run_mc_cmd(cmd, server_cmd_thread)
-        return True
+            # currently doing NO OUTPUT?
+	    self.cmd(cmd[1:])
+	else:
+	    result += self.run_mc_cmd(cmd)
+	return result
 
-    def run_mc_cmd(self, cmd, server_cmd_thread):
+    def run_mc_cmd(self, cmd):
+    	result = ""
         if cmd == "map":
             self.runMapper()
             print "    run mapper"
-            server_cmd_thread.conn.send("Mapper Successfull Run.\n")
+            result += "Mapper Successfull Run.\n"
         elif cmd == "mapsend":
             self.runMapperAndSend()
             print "    run mapper and sent email"
-            server_cmd_thread.conn.send("Map Successfully Created and Sent.\n")
+            result += "Map Successfully Created and Sent.\n"
         elif cmd == "getlogs":
             logs = self.get_logs_since_last_start()
             for i in range(len(logs)):
-                server_cmd_thread.conn.send(logs[i])
+                result += logs[i]
         elif cmd == "start":
             self.start()
-            server_cmd_thread.conn.send("Minecraft Server Started.\n")
+            result += "Minecraft Server Started.\n"
         elif cmd == "stop":
             self.stop()
-            server_cmd_thread.conn.send("Minecraft Server Stopped.\n")
+            result += "Minecraft Server Stopped.\n"
+        elif cmd == "help":
+        	result += self.build_help()
         else:
-            server_cmd_thread.conn.send("Could not parse command.  Type 'help' to get command list.\n")
+            result += "Could not parse command.  Type 'help' to get command list.\n"
+        return result
                 
             
-            
+    def build_help(self):
+    	result = ""
+    	result += "- Help - client commands listed below:\n"
+    	result += "start   - start the Minecraft server.\n"
+    	result += "stop    - stop the Minecraft server.\n"
+    	result += "getlogs - get the Minecraft server logs.\n"
+    	result += "map     - run the mapping system.\n"
+    	result += "mapsend - run the mapping system, and email it to yourself.\n"
+    	return result
 
     def run_test_setup(self):
         self.start()
@@ -261,8 +275,9 @@ class ServerCmdThread(threading.Thread):
             if not data: break
             self.server.lock.acquire()
             self.log("Lock acquired for cmd: '" + data + "'")
-            if self.server.run_server_cmd(data, self):
-                self.conn.send("MCServer command received correctly.")
+            result = self.server.run_server_cmd(data)
+            self.conn.send(result)
+            self.conn.send("MCServer command received correctly.")
             self.server.lock.release()
 
     def log(self, log_string):

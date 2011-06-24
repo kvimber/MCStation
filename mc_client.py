@@ -47,7 +47,7 @@ class MCClient:
                     data.append(recvd[i])
 ##            print "Received reply from server:"
 ##            print data
-            for i in range(len(data)):
+            for i in range(len(data)-1):
                 print data[i]
         self.close()
 
