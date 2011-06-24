@@ -159,13 +159,13 @@ class MCServer:
         if cmd.startswith("/"):
             print "    Executing minecraft server command '" + cmd[1:] + "'."
             # currently doing NO OUTPUT?
-	    self.cmd(cmd[1:])
-	else:
-	    result += self.run_mc_cmd(cmd)
-	return result
+            self.cmd(cmd[1:])
+        else:
+            result += self.run_mc_cmd(cmd)
+        return result
 
     def run_mc_cmd(self, cmd):
-    	result = ""
+        result = ""
         if cmd == "map":
             self.runMapper()
             print "    run mapper"
@@ -185,21 +185,21 @@ class MCServer:
             self.stop()
             result += "Minecraft Server Stopped.\n"
         elif cmd == "help":
-        	result += self.build_help()
+            result += self.build_help()
         else:
             result += "Could not parse command.  Type 'help' to get command list.\n"
         return result
                 
             
     def build_help(self):
-    	result = ""
-    	result += "- Help - client commands listed below:\n"
-    	result += "start   - start the Minecraft server.\n"
-    	result += "stop    - stop the Minecraft server.\n"
-    	result += "getlogs - get the Minecraft server logs.\n"
-    	result += "map     - run the mapping system.\n"
-    	result += "mapsend - run the mapping system, and email it to yourself.\n"
-    	return result
+        result = ""
+        result += "- Help - client commands listed below:\n"
+        result += "start   - start the Minecraft server.\n"
+        result += "stop    - stop the Minecraft server.\n"
+        result += "getlogs - get the Minecraft server logs.\n"
+        result += "map     - run the mapping system.\n"
+        result += "mapsend - run the mapping system, and email it to yourself.\n"
+        return result
 
     def run_test_setup(self):
         self.start()
