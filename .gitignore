@@ -11,3 +11,6 @@
 /world/
 # ignore all compiled python files
 /*.pyc
+# ignore all compiled wix objects
+/*.wixobj
+/*.wixpdb

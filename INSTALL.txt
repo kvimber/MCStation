@@ -1,0 +1,17 @@
+MCStation
+
+You will need python and java on your path.
+Please report any issues or errors to bugs@boxingnun.net
+
+
+Commands to set up MCStation. Run all commands without the quotes
+
+1)Edit properties.py. This is where you can point to any user specific settings you have.
+2)"MCStation adduser" <- This adds a user to your security file. This must be run on your server. 
+3)"MCStation server" <- This starts the server and listens to on the port and IP you selected in the properties file.
+4)"MCStation client" <- This can be run on any machine. Using this you can run MCStation commands against your running Minecraft server. A full list of	
+	commands can be found by typing help into the client.
+
+	
+We hope you enjoy this as much as we did making it. Follow us on Twitter @Boxingn or at www.boxingnun.net
+

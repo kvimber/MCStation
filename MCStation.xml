@@ -14,17 +14,26 @@
 			<Directory Id='ProgramFilesFolder' Name='PFiles'>
 				<Directory Id="BNS" Name="BNS">
 					<Directory Id="INSTALLDIR" Name="MCStation">
-						<Component Id="ServerCode" Guid="45755d70-9603-4490-8329-C03D166C9413">
-							<File Id="mc_server" Name="mc_server.py" DiskId='1' Source="mc_server.py" KeyPath="yes"/>
-							<File Id="mailer" Name="mailer.py" DiskId='1' Source="mailer.py" />
-							<File Id="mapper" Name="mapper.py" DiskId='1' Source="mapper.py" />
-						</Component>
-						<Component Id="Properties" Guid="E77dE431-44CD-4190-b9BE-76A68dCAA562">
-							<File Id="properties" Name="properties.py" DiskId='1' Source="properties.py" KeyPath="yes"/>
-						</Component>
-						<Component Id="ClientCode" Guid="55075150-9832-11E0-8552-38F44724019B">
-							<File Id="client" Name="mc_client.py" DiskId='1' Source="mc_client.py" KeyPath="yes"/>
-						</Component>
+						<Directory Id="core" Name="core">
+							<Component Id="ServerCode" Guid="45755d70-9603-4490-8329-C03D166C9413">
+								<File Id="mc_server" Name="mc_server.py" DiskId='1' Source="mc_server.py" KeyPath="yes"/>
+								<File Id="mailer" Name="mailer.py" DiskId='1' Source="mailer.py" />
+								<File Id="mapper" Name="mapper.py" DiskId='1' Source="mapper.py" />
+							</Component>
+							<Component Id="Common" Guid="E77dE431-44CD-4190-b9BE-76A68dCAA562">
+								<File Id="properties" Name="properties.py" DiskId='1' Source="properties.py" KeyPath="yes"/>
+								<File Id="security" Name="security.py" DiskId='1' Source="mc_security.py" />
+								<File Id="MCStation" Name="MCStation.bat" DiskId='1' Source="MCStation.bat" />								
+								<File Id="INSTALL" Name="INSTALL.txt" DiskId='1' Source="INSTALL.txt" />
+							</Component>
+							<Component Id="ClientCode" Guid="55075150-9832-11E0-8552-38F44724019B">
+								<File Id="client" Name="mc_client.py" DiskId='1' Source="mc_client.py" KeyPath="yes"/>
+							</Component>
+						</Directory>
+						<Component Id="Common" Guid="E77dE431-44CD-4190-b9BE-76A68dCAA562">
+								<File Id="MCStation" Name="MCStation.bat" DiskId='1' Source="MCStation.bat" />								
+								<File Id="INSTALL" Name="INSTALL.txt" DiskId='1' Source="INSTALL.txt" />
+							</Component>
 					</Directory>
 				</Directory>
 			</Directory>
@@ -33,15 +42,18 @@
 		<Feature Id='Complete' Title='MCStation' Description="Complete Install of both Server and Client" Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
 			<Feature Id='Server' Title='Server' Description='Installs only the server side components' Level='1'>
 				<ComponentRef Id='ServerCode' />
-				<ComponentRef Id='Properties' />
+				<ComponentRef Id='Common' />
 			</Feature>
 			
 			<Feature Id='Client' Title='Client' Description='Installs the client side components' Level='1000'>
 				<ComponentRef Id='ClientCode'/>
+				<ComponentRef Id='Common' />
 			</Feature>
 		</Feature>
-		
-		<UIRef Id="WixUI_Mondo"/>
+		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+		<UIRef Id="WixUI_FeatureTree"/>
 		<UIRef Id="WixUI_ErrorProgressText"/>
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+		
 	</Product>
 </Wix>
