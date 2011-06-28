@@ -10,6 +10,7 @@
 CLI_RUNSERVER = 'cli.run_server'
 CLI_RUNMAPPER = 'cli.run_mapper'
 CLI_JVMMEM = 'cli.jvm_mem'
+CLI_TIMEOUT = 'cli.timeout'
 MAPPER_CMD = 'mapper.cmd'
 MAPPER_ARG = 'mapper.arg'
 PATH_SERVER = 'path.server'
@@ -32,21 +33,21 @@ PROPS = {}
 # path to server file, most likely won't change since the server is run
 # from the directory by MCServer
 PROPS[PATH_SERVER] = "../server"
-# Directory where mapping executable software resides
-PROPS[PATH_MAPPER] = "../mcmap-src"
 PROPS[PATH_LOGFILE] = "server.log"
 # JVM Memory argument for the minecraft server
 PROPS[CLI_JVMMEM] = 1536
 # command to run the minecraft server
 ##CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar " + PATH_SERVER + "/minecraft_server.jar nogui",
 PROPS[CLI_RUNSERVER] = "java -Xmx" + str(PROPS[CLI_JVMMEM]) + "M -Xms" + str(PROPS[CLI_JVMMEM]) + "M -jar " + PROPS[PATH_SERVER] + "/minecraft_server.jar nogui"
+#Timeout for starting the minecraft server
+PROPS[CLI_TIMEOUT] = 60
 # Executable or batch file used to run mapping software
-PROPS[PATH_MAPPER] = "../mcmap-src/"
-PROPS[MAPPER_CMD] = "mcmap"
+PROPS[PATH_MAPPER] = "../mapper"
+PROPS[MAPPER_CMD] = "Tectonicus.jar"
 # Arguments passed to mapper command to create map
-PROPS[MAPPER_ARG] = "world"
+PROPS[MAPPER_ARG] = "../server/world"
 # command to run the map system
-PROPS[CLI_RUNMAPPER] = PROPS[PATH_MAPPER] + PROPS[MAPPER_CMD] + " " + PROPS[MAPPER_ARG]
+PROPS[CLI_RUNMAPPER] = "java -jar " + PROPS[PATH_MAPPER] + PROPS[MAPPER_CMD] + " " + PROPS[MAPPER_ARG]
 # mail server details, default are gmail settings
 PROPS[SMTP_HOST] = "smtp.gmail.com"
 PROPS[SMTP_PORT] = 465
@@ -56,7 +57,7 @@ PROPS[SMTP_FROMADDR] = ""
 PROPS[SMTP_FROMPASS] = ""
 # to address for map & notification emails
 PROPS[SMTP_TOADDR] = ""
-PROPS[SMTP_TIMEOUT] = 30
+PROPS[SMTP_TIMEOUT] = 60
 # subject of map & notification emails
 PROPS[SMTP_SUBJECT] = "Current MC Map"
 # path to img file that's output by the map software

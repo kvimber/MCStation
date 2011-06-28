@@ -45,7 +45,9 @@ class MCServer:
            raise RuntimeError("Unable to find minecraft_server.jar. Double check PROPS[PATH_SERVER] in properties.py")
         
         # Checks to see if mapping utility can be found.
-        self.mapper_avail = os.path.exists(self.props[properties.PATH_MAPPER] + self.props[properties.MAPPER_CMD])
+        self.mapper_avail = os.path.exists(self.props[properties.PATH_MAPPER])
+        print self.props[properties.PATH_MAPPER]
+        print os.path.exists(self.props[properties.PATH_MAPPER])
         if(self.mapper_avail):
             print "Mapping software found. Mapping functionality available for use"
         else:
@@ -130,7 +132,7 @@ class MCServer:
 
     def run_mapper_and_send(self, to_addr=None):
         if(self.mapper_avail):
-            self.runMapper()
+            self.run_mapper()
             mailTool = mailer.Mailer(self)
             mailTool.sendMap(to_addr)
         else:
@@ -167,11 +169,11 @@ class MCServer:
     def run_mc_cmd(self, cmd):
         result = ""
         if cmd == "map":
-            self.runMapper()
+            self.run_mapper()
             print "    run mapper"
             result += "Mapper Successfull Run.\n"
         elif cmd == "mapsend":
-            self.runMapperAndSend()
+            self.run_mapper_and_send()
             print "    run mapper and sent email"
             result += "Map Successfully Created and Sent.\n"
         elif cmd == "getlogs":
@@ -243,9 +245,9 @@ class MCServer:
                 if(logs[-1].find("[INFO] Done") != -1):
                     watch = False
                 count += 1
-                if(count>30):
+                if(count>self.props[properties.CLI_TIMEOUT]):
                     watch = False
-                    self.debug()
+                    #self.debug()
                     raise RuntimeError("Error starting server")
             except IndexError:
                 continue
