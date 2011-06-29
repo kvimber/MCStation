@@ -45,9 +45,17 @@ class MCServer:
            raise RuntimeError("Unable to find minecraft_server.jar. Double check PROPS[PATH_SERVER] in properties.py")
         
         # Checks to see if mapping utility can be found.
-        self.mapper_avail = os.path.exists(self.props[properties.PATH_MAPPER])
-        print self.props[properties.PATH_MAPPER]
-        print os.path.exists(self.props[properties.PATH_MAPPER])
+        try:
+            self.props[properties.CLI_RUNMAPPER]
+            if len(os.listdir(self.props[properties.PATH_MAPPER])) > 0:
+                self.mapper_avail = True
+            else:
+                self.mapper_avail = False
+        except KeyError:
+            self.mapper_avail = False
+##        self.mapper_avail = os.path.exists(self.props[properties.PATH_MAPPER])
+##        print self.props[properties.PATH_MAPPER]
+##        print os.path.exists(self.props[properties.PATH_MAPPER])
         if(self.mapper_avail):
             print "Mapping software found. Mapping functionality available for use"
         else:
@@ -170,11 +178,9 @@ class MCServer:
         result = ""
         if cmd == "map":
             self.run_mapper()
-            print "    run mapper"
             result += "Mapper Successfull Run.\n"
         elif cmd == "mapsend":
             self.run_mapper_and_send()
-            print "    run mapper and sent email"
             result += "Map Successfully Created and Sent.\n"
         elif cmd == "getlogs":
             logs = self.get_logs_since_last_start()

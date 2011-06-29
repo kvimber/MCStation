@@ -14,3 +14,10 @@
 # ignore all compiled wix objects
 /*.wixobj
 /*.wixpdb
+# ignore all traditional minecraft server files
+/server/
+# ignore pass file
+/core/pass.txt
+# ignore mapping system
+/mapper/
+

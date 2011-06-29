@@ -15,7 +15,8 @@ class MCClient:
     def authenticate(self):
         uname, upass = mc_sec.get_creds()
         to_send = mc_sec.build_user_line(uname, upass)
-        print "sending '" + to_send + "'"
+##        print "sending '" + to_send + "'"
+        print "Sending authentication..."
         self.s.send(to_send)
         data = self.s.recv(1024)
         if data == 'Authenticated':
