@@ -47,10 +47,10 @@ PROPS[SMTP_HOST] = "smtp.gmail.com"
 PROPS[SMTP_PORT] = 465
 # server from address login settings
 # notice that this shouldn't work with gmail's two factor auth
-PROPS[SMTP_FROMADDR] = "kevin.accero@gmail.com"
-PROPS[SMTP_FROMPASS] = "baseball!"
+PROPS[SMTP_FROMADDR] = ""
+PROPS[SMTP_FROMPASS] = ""
 # to address for map & notification emails
-PROPS[SMTP_TOADDR] = "kvimber@gmail.com"
+PROPS[SMTP_TOADDR] = ""
 PROPS[SMTP_TIMEOUT] = 60
 # subject of map & notification emails
 PROPS[SMTP_SUBJECT] = "Current MC Map"
