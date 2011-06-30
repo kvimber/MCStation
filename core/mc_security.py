@@ -10,7 +10,7 @@ import hashlib
 import getpass
 
 SEPARATOR = ":::"
-FILENAME = "../core/pass.txt"
+FILENAME = "../core/pass.mcs"
 
 def get_creds(setting=False):
     user_name = raw_input("Username: ")

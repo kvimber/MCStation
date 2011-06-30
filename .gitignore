@@ -19,6 +19,7 @@
 /server/
 # ignore pass file
 /core/pass.txt
+/core/pass.mcs
 # ignore mapping system
 /mapper/
 # ignore binary files
