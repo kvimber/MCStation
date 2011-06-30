@@ -20,14 +20,14 @@ import mc_security as mc_sec
 class MCServer:
 
     def __init__(self):
-        print "System initializing..."
+        print "MCStation initializing..."
         self.props = properties.PROPS
         self.p = None
         self.lock = threading.Lock()
         self.thread_id = 0
         self.check_platform()
         self.startup()
-        print "System initialized."
+        print "MCStation initialized."
 
     #Validates the users system and properties
     def startup(self):
@@ -177,6 +177,7 @@ class MCServer:
                 print "Thread " + thread.name + " started..."
             except KeyboardInterrupt:
                 print "\nKeyboard Interrupt Occurred.  Exiting."
+                self.stop()
                 break
 
     def run_server_cmd(self, cmd):
@@ -309,7 +310,8 @@ class ServerCmdThread(threading.Thread):
 
 def main():
     server = MCServer()
-    print "Running server..."
+    print "Starting Minecraft server..."
+    server.start()
     server.run_server()
     
 
