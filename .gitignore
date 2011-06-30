@@ -23,3 +23,6 @@
 /mapper/
 # ignore binary files
 /bin/
+**/*.wixobj
+**/*.wixpdb
+**/*.msi
