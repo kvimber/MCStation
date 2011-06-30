@@ -31,19 +31,20 @@ class MCServer:
 
     #Validates the users system and properties
     def startup(self):
-        # Checks to see if java is available
-        self.jtest = subprocess.Popen(shlex.split(self.java_cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        (child_stdout, child_stderr) = self.jtest.communicate()
-        if(child_stderr.startswith("java version")):
-            print "Java found"
+        self.check_java()
+        self.check_minecraft()
+        self.check_mapper()
+        self.check_auth_system()
+        # TODO: Check for mailer
+
+    def check_auth_system(self):
+        if not os.path.exists(mc_sec.FILENAME):
+            print "No authentication available, please create a new user below:"
+            mc_sec.add_new_user_to_pass_store()
         else:
-            raise RuntimeError("Unable to locate Java. Verify you have it installed and on your path")
-        # Checks to see if minecraft_server.jar can be found
-        if(os.path.exists(self.props[properties.PATH_SERVER] + "/minecraft_server.jar")):
-           print "Minecraft found"
-        else:
-           raise RuntimeError("Unable to find minecraft_server.jar. Double check PROPS[PATH_SERVER] in properties.py")
-        
+            print "Authentication system ready."
+
+    def check_mapper(self):
         # Checks to see if mapping utility can be found.
         try:
             self.props[properties.CLI_RUNMAPPER]
@@ -61,7 +62,22 @@ class MCServer:
         else:
             print "Mapping software not found. Add mapper to properties.py if you want to enable mapping functionality"
 
-        # TODO: Check for mailer
+
+    def check_minecraft(self):
+        # Checks to see if minecraft_server.jar can be found
+        if(os.path.exists(self.props[properties.PATH_SERVER] + "/minecraft_server.jar")):
+           print "Minecraft found"
+        else:
+           raise RuntimeError("Unable to find minecraft_server.jar. Double check PROPS[PATH_SERVER] in properties.py")
+
+    def check_java(self):
+        # Checks to see if java is available
+        self.jtest = subprocess.Popen(shlex.split(self.java_cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        (child_stdout, child_stderr) = self.jtest.communicate()
+        if(child_stderr.startswith("java version")):
+            print "Java found"
+        else:
+            raise RuntimeError("Unable to locate Java. Verify you have it installed and on your path")
 
     def start(self):
         if self.p is None:
