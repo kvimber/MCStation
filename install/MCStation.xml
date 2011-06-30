@@ -16,38 +16,60 @@
 					<Directory Id="INSTALLDIR" Name="MCStation">
 						<Directory Id="core" Name="core">
 							<Component Id="ServerCode" Guid="45755d70-9603-4490-8329-C03D166C9413">
-								<File Id="mc_server" Name="mc_server.py" DiskId='1' Source="mc_server.py" KeyPath="yes"/>
-								<File Id="mailer" Name="mailer.py" DiskId='1' Source="mailer.py" />
-								<File Id="mapper" Name="mapper.py" DiskId='1' Source="mapper.py" />
+								<File Id="mc_server" Name="mc_server.py" DiskId='1' Source="../core/mc_server.py" KeyPath="yes"/>
+								<File Id="mailer" Name="mailer.py" DiskId='1' Source="../core/mailer.py" />
+								<File Id="mapper" Name="mapper.py" DiskId='1' Source="../core/mapper.py" />
 							</Component>
-							<Component Id="Common" Guid="E77dE431-44CD-4190-b9BE-76A68dCAA562">
-								<File Id="properties" Name="properties.py" DiskId='1' Source="properties.py" KeyPath="yes"/>
-								<File Id="security" Name="security.py" DiskId='1' Source="mc_security.py" />
+							<Component Id="CommonCode" Guid="E77dE431-44CD-4190-b9BE-76A68dCAA562">
+								<File Id="mc_properties" Name="properties.py" DiskId='1' Source="../core/properties.py" KeyPath="yes"/>
+								<File Id="mc_security" Name="security.py" DiskId='1' Source="../core/mc_security.py" />
 								<File Id="MCStation" Name="MCStation.bat" DiskId='1' Source="MCStation.bat" />								
-								<File Id="INSTALL" Name="INSTALL.txt" DiskId='1' Source="INSTALL.txt" />
 							</Component>
 							<Component Id="ClientCode" Guid="55075150-9832-11E0-8552-38F44724019B">
-								<File Id="client" Name="mc_client.py" DiskId='1' Source="mc_client.py" KeyPath="yes"/>
+								<File Id="mc_client" Name="mc_client.py" DiskId='1' Source="../core/mc_client.py" KeyPath="yes"/>
 							</Component>
 						</Directory>
-						<Component Id="Common" Guid="E77dE431-44CD-4190-b9BE-76A68dCAA562">
-								<File Id="MCStation" Name="MCStation.bat" DiskId='1' Source="MCStation.bat" />								
+						<Directory Id="mapper" Name="mapper">
+							<Component Id="mapper" Guid="7AC5C3A2-A33D-11E0-9AC4-6D4C4824019B">
+								<File Id="mcmap" Name="mcmap.exe" DiskId='1' Source="../mapper/mcmap.exe" KeyPath="yes"/>
+								<File Id="mcmapGUI" Name="mcmapGUI.exe" DiskId='1' Source="../mapper/mcmapGUI.exe"/>
+							<Component Id="CommonOther" Guid="8D515460-A33C-11E0-ACC9-754B4824019B">							
 								<File Id="INSTALL" Name="INSTALL.txt" DiskId='1' Source="INSTALL.txt" />
+								<File Id="adduser" Name="add_user.bat" DiskId='1' Source="add_user.bat" />
+							</Component>
+							<Component Id="ServerScripts" Guid="97C247A6-A33C-11E0-93EE-764B4824019B">
+								<File Id="server" Name="server.bat" DiskId='1' Source="server.bat" KeyPath="yes"/>
+							</Component>
+							<Component Id="ClientScripts" Guid="9BDE9EE8-A33C-11E0-9F88-774B4824019B">
+								<File Id="client" Name="client.bat" DiskId='1' Source="client.bat" KeyPath="yes"/>
 							</Component>
 					</Directory>
 				</Directory>
 			</Directory>
 		</Directory>
-
+		
+		<ComponentGroup Id='Server'>
+				<ComponentRef Id='ServerCode' />
+				<ComponentRef Id='ServerScripts' />
+				<ComponentRef Id='mapper'/>
+		</ComponentGroup>
+		<ComponentGroup Id='Client'>
+				<ComponentRef Id='ClientCode' />
+				<ComponentRef Id='ClientScripts' />
+		</ComponentGroup>
+		<ComponentGroup Id='Common'>
+				<ComponentRef Id='CommonCode' />
+				<ComponentRef Id='CommonOther' />
+		</ComponentGroup>
 		<Feature Id='Complete' Title='MCStation' Description="Complete Install of both Server and Client" Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
 			<Feature Id='Server' Title='Server' Description='Installs only the server side components' Level='1'>
-				<ComponentRef Id='ServerCode' />
-				<ComponentRef Id='Common' />
+				<ComponentGroupRef Id='Server' />
+				<ComponentGroupRef Id='Common' />
 			</Feature>
 			
 			<Feature Id='Client' Title='Client' Description='Installs the client side components' Level='1000'>
-				<ComponentRef Id='ClientCode'/>
-				<ComponentRef Id='Common' />
+				<ComponentGroupRef Id='Client'/>
+				<ComponentGroupRef Id='Common' />
 			</Feature>
 		</Feature>
 		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />

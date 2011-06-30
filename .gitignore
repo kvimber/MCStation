@@ -21,4 +21,5 @@
 /core/pass.txt
 # ignore mapping system
 /mapper/
-
+# ignore binary files
+/bin/

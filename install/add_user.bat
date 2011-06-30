@@ -1,0 +1,1 @@
+./core/MCStation.bat adduser
