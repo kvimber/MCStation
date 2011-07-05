@@ -22,7 +22,7 @@
 							</Component>
 							<Component Id="CommonCode" Guid="E77dE431-44CD-4190-b9BE-76A68dCAA562">
 								<File Id="mc_properties" Name="properties.py" DiskId='1' Source="../core/properties.py" KeyPath="yes"/>
-								<File Id="mc_security" Name="security.py" DiskId='1' Source="../core/mc_security.py" />
+								<File Id="mc_security" Name="mc_security.py" DiskId='1' Source="../core/mc_security.py" />
 								<File Id="MCStation" Name="MCStation.bat" DiskId='1' Source="MCStation.bat" />								
 							</Component>
 							<Component Id="ClientCode" Guid="55075150-9832-11E0-8552-38F44724019B">
@@ -33,6 +33,13 @@
 							<Component Id="mapper" Guid="7AC5C3A2-A33D-11E0-9AC4-6D4C4824019B">
 								<File Id="mcmap" Name="mcmap.exe" DiskId='1' Source="../mapper/mcmap.exe" KeyPath="yes"/>
 								<File Id="mcmapGUI" Name="mcmapGUI.exe" DiskId='1' Source="../mapper/mcmapGUI.exe"/>
+							</Component>
+						</Directory>
+						<Directory Id="serverJar" Name="server">
+							<Component Id="serverJar" Guid="3BA7CF64-A359-11E0-AEC8-EF6F4824019B">
+								<File Id="serverJar" Name="minecraft_server.jar" DiskId='1' Source="../server/minecraft_server.jar" KeyPath="yes"/>
+							</Component>
+						</Directory>
 							<Component Id="CommonOther" Guid="8D515460-A33C-11E0-ACC9-754B4824019B">							
 								<File Id="INSTALL" Name="INSTALL.txt" DiskId='1' Source="INSTALL.txt" />
 								<File Id="adduser" Name="add_user.bat" DiskId='1' Source="add_user.bat" />
@@ -52,6 +59,7 @@
 				<ComponentRef Id='ServerCode' />
 				<ComponentRef Id='ServerScripts' />
 				<ComponentRef Id='mapper'/>
+				<ComponentRef Id='serverJar'/>
 		</ComponentGroup>
 		<ComponentGroup Id='Client'>
 				<ComponentRef Id='ClientCode' />

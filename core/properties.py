@@ -38,7 +38,7 @@ PROPS[CLI_JVMMEM] = 1536
 ##CLI_RUNSERVER: "java -Xmx1024M -Xms1024M -jar " + PATH_SERVER + "/minecraft_server.jar nogui",
 PROPS[CLI_RUNSERVER] = "java -Xmx" + str(PROPS[CLI_JVMMEM]) + "M -Xms" + str(PROPS[CLI_JVMMEM]) + "M -jar " + PROPS[PATH_SERVER] + "/minecraft_server.jar nogui"
 #Timeout for starting the minecraft server
-PROPS[CLI_TIMEOUT] = 60
+PROPS[CLI_TIMEOUT] = 180
 # command to run the map system
 PROPS[PATH_MAPPER] = "../mapper"
 PROPS[CLI_RUNMAPPER] = PROPS[PATH_MAPPER] + "/mcmap-src/mcmap " + PROPS[PATH_SERVER] + "/world"
