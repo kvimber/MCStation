@@ -13,5 +13,5 @@ Commands to set up MCStation. Run all commands without the quotes
 	commands can be found by typing help into the client.
 
 	
-We hope you enjoy this as much as we did making it. Follow us on Twitter @Boxingn or at www.boxingnun.net
+We hope you enjoy this as much as we did making it. Follow us on Twitter @Boxing_N or at www.boxingnun.net
 
